@@ -8,33 +8,19 @@ public class LinkedList<X> implements List<X> {
     private int size;
 
     public LinkedList(){
-        head = new Node(null, null);
-        head.next = head;
+
     }
 
     public void setSize(int size) {
         this.size = size;
     }
 
-    public X getEl(int index){
-        if (index > size){
+    private Node getNode(int index){
+        if (index >= size){
             throw new IndexOutOfBoundsException();
         }
-
         Node result = head;
-        for (int i = 0; i < index - 1; i++) {
-            result = result.next;
-        }
-        return result.element;
-    }
-
-    public Node getNode(int index){
-        if (index > size){
-            throw new IndexOutOfBoundsException();
-        }
-
-        Node result = head;
-        for (int i = 0; i < index - 1; i++) {
+        for (int i = 0; i < index; i++) {
             result = result.next;
         }
         return result;
@@ -100,43 +86,52 @@ public class LinkedList<X> implements List<X> {
 
     @Override
     public boolean add(X x) {
-        if (head.element == null){
-            head.element = x;
-            head.next = head;
-            size++;
-            return true;
+        if (head == null){
+            head = new Node(x, null);
         } else {
             Node newNode = head;
-            for (int i = 0; i < size; i++) {
+            while (newNode.next != null) {
                 newNode = newNode.next;
             }
-            newNode.element = x;
-            newNode.next = head;
+            newNode.next = new Node(x, null);
             size++;
-            return true;
         }
+        return true;
     }
+
+//    @Override
+//    public boolean remove(Object o) {
+//        if (!this.contains(o)){
+//            throw new NoSuchElementException("Element does not exist");
+//        }
+//        Node delete = head;
+//        Node afterDelete = head;
+//        Node beforeDelete = head;
+//        for (int i = 0; i < indexOf(o); i++) {
+//            delete = delete.next;
+//        }
+//        for (int i = 0; i < indexOf(o) + 1; i++) {
+//            afterDelete = afterDelete.next;
+//        }
+//        for (int i = 0; i < indexOf(o) - 1; i++) {
+//            beforeDelete = beforeDelete.next;
+//        }
+//
+//       // delete = new Node(null, null);
+//        afterDelete.next = beforeDelete;
+//        size--;
+//        return true;
+//    }
+
 
     @Override
     public boolean remove(Object o) {
-        if (!this.contains(o)){
-            throw new NoSuchElementException("Element does not exist");
+        int index = indexOf(o);
+        if (index == 0){
+            head = head.next;
         }
-        Node delete = head;
-        Node afterDelete = head;
-        Node beforeDelete = head;
-        for (int i = 0; i < indexOf(o); i++) {
-            delete = delete.next;
-        }
-        for (int i = 0; i < indexOf(o) + 1; i++) {
-            afterDelete = afterDelete.next;
-        }
-        for (int i = 0; i < indexOf(o) - 1; i++) {
-            beforeDelete = beforeDelete.next;
-        }
-
-       // delete = new Node(null, null);
-        afterDelete.next = beforeDelete;
+        Node buffer = getNode(index - 1);
+        buffer.next = buffer.next.next;
         size--;
         return true;
     }
@@ -163,7 +158,7 @@ public class LinkedList<X> implements List<X> {
 
     @Override
     public boolean addAll(int index, Collection<? extends X> c) {
-        if (index > size){
+        if (index >= size){
             throw new IndexOutOfBoundsException();
         }
 
@@ -202,66 +197,36 @@ public class LinkedList<X> implements List<X> {
 
     @Override
     public X get(int index) {
-        if (index > size){
-            throw new IndexOutOfBoundsException();
-        }
-
-        int count = 0;
-        Node result = head;
-        for (X x: this) {
-            count++;
-            result = result.next;
-            if (count == index){
-                return result.element;
-            }
-        }
-        return null;
+        return this.getNode(index).element;
     }
 
     @Override
     public X set(int index, X element) {
-        if (index > size){
+        if (index >= size){
             throw new IndexOutOfBoundsException();
         }
 
-        X result = null;
-        Node buffer = head;
-        for (int i = 0; i < size; i++) {
-            buffer = buffer.next;
-            if (i == index){
-                result = buffer.element;
-                buffer.element = element;
-            }
-        }
-        return result;
+        return this.getNode(index).element = element;
     }
 
     @Override
     public void add(int index, X element) {
-        if (index > size){
+        if (index >= size){
             throw new IndexOutOfBoundsException();
         }
 
-        if (getNode(index).next == head){
-            Node newNode = new Node(element, head);
-            getNode(index).next = newNode;
+        if (getNode(index).next == null){
+            Node newNode = new Node(element, null);
             size++;
         }
 
-        Node newNode;
-        Node afterAdded = head;
-        Node beforeAdded = head;
-
-        for (int i = 0; i < index + 1; i++) {
-            afterAdded = afterAdded.next;
+        Node buffer = head;
+        for (int i = 0; i < index - 1; i++) {
+            buffer = buffer.next;
         }
-
-        for (int i = 0; i < index; i++) {
-            beforeAdded = beforeAdded.next;
-        }
-
-        newNode = new Node(element, afterAdded);
-        beforeAdded.next = newNode;
+        Node newNode = new Node(element, buffer.next.next);
+        buffer.next = newNode;
+        size++;
     }
 
     @Override
@@ -354,12 +319,12 @@ public class LinkedList<X> implements List<X> {
 
             @Override
             public boolean hasPrevious() {
-                return (contains(getEl(index - 1)));
+                return (contains(get(index - 1)));
             }
 
             @Override
             public X previous() {
-                return getEl(index - 1);
+                return get(index - 1);
             }
 
             @Override
@@ -399,7 +364,7 @@ public class LinkedList<X> implements List<X> {
         Node buffer = getNode(fromIndex);
         for (int i = fromIndex; i < toIndex; i++) {
             buffer = buffer.next;
-            result.add(getEl(i));
+            result.add(get(i));
         }
         return result;
     }

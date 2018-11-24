@@ -18,7 +18,7 @@ public class ProjectManager implements GroupsManager {
 
     private boolean alreadyAdded(EmployeeGroup groupToAdd){
         for (int i = 0; i < groups.size(); i++) {
-            if (groups.getEl(i).equals(groupToAdd)){
+            if (groups.get(i).equals(groupToAdd)){
                 return true;
             }
         }
@@ -145,7 +145,7 @@ public class ProjectManager implements GroupsManager {
     public int groupsQuantity(){
         int count = 0;
         for (int i = 0; i < groups.size(); i++) {
-            if (groups.getEl(i) != null){
+            if (groups.get(i) != null){
                 count++;
             }
         }
@@ -155,7 +155,7 @@ public class ProjectManager implements GroupsManager {
     public int remove(EmployeeGroup group) {
         int count = 0;
         for (int i = 0; i < groups.size(); i++) {
-            if (groups.getEl(i).getName().equals(group.getName())) {
+            if (groups.get(i).getName().equals(group.getName())) {
                 groups.remove(i);
                 count++;
             }
@@ -165,7 +165,7 @@ public class ProjectManager implements GroupsManager {
 
     public boolean remove(String groupName){
         for (int i = 0; i < groups.size(); i++) {
-            if (groups.getEl(i).getName().equals(groupName)){
+            if (groups.get(i).getName().equals(groupName)){
                 groups.remove(i);
                 return true;
             }
@@ -175,8 +175,8 @@ public class ProjectManager implements GroupsManager {
 
     public EmployeeGroup getGroup(String groupName){
         for (int i = 0; i < groups.size(); i++) {
-            if (groups.getEl(i).getName().equals(groupName)){
-                return groups.getEl(i);
+            if (groups.get(i).getName().equals(groupName)){
+                return groups.get(i);
             }
         }
         return null;
@@ -185,7 +185,7 @@ public class ProjectManager implements GroupsManager {
     public EmployeeGroup[] getGroups(){
         EmployeeGroup[] temp = new EmployeeGroup[groupsQuantity()];
         for (int i = 0; i < groups.size(); i++) {
-            temp[i] = groups.getEl(i);
+            temp[i] = groups.get(i);
         }
         return temp;
     }
@@ -193,7 +193,7 @@ public class ProjectManager implements GroupsManager {
     public int employeesQuantity(){
         int count = 0;
         for (int i = 0; i < groupsQuantity(); i++) {
-            count += groups.getEl(i).getSize();
+            count += groups.get(i).getSize();
         }
         return count;
     }
@@ -201,7 +201,7 @@ public class ProjectManager implements GroupsManager {
     public int employeesQuantity(JobTitlesEnum jobTitle){
         int count = 0;
         for (int i = 0; i < groupsQuantity(); i++) {
-            count += groups.getEl(i).getEmployees(jobTitle).length;
+            count += groups.get(i).getEmployees(jobTitle).length;
         }
         return count;
     }
@@ -210,9 +210,9 @@ public class ProjectManager implements GroupsManager {
         Employee temp = null;
         int indexOfMax = 0;
         for (int i = 0; i < groupsQuantity(); i++) {
-            if (groups.getEl(i).employeeBestSalary().getSalary() < groups.getEl(indexOfMax).employeeBestSalary().getSalary()){
+            if (groups.get(i).employeeBestSalary().getSalary() < groups.get(indexOfMax).employeeBestSalary().getSalary()){
                 indexOfMax = i;
-                temp = groups.getEl(indexOfMax).employeeBestSalary();
+                temp = groups.get(indexOfMax).employeeBestSalary();
             }
         }
         return temp;
@@ -221,8 +221,8 @@ public class ProjectManager implements GroupsManager {
     public EmployeeGroup groupOfEmployee(String firstName, String secondName){
         EmployeeGroup temp = null;
         for (int i = 0; i < groupsQuantity(); i++) {
-            if (groups.getEl(i).getEmployee(firstName, secondName) != null){
-                temp = groups.getEl(i);
+            if (groups.get(i).getEmployee(firstName, secondName) != null){
+                temp = groups.get(i);
             }
         }
         return temp;
@@ -232,7 +232,7 @@ public class ProjectManager implements GroupsManager {
     public int partTimeEmployeesQuantity() {
         int count = 0;
         for (int i = 0; i < groups.size(); i++) {
-            count += groups.getEl(i).partTimeEmployeesQuantity();
+            count += groups.get(i).partTimeEmployeesQuantity();
         }
         return count;
     }
@@ -241,7 +241,7 @@ public class ProjectManager implements GroupsManager {
     public int staffEmployeeQuantity() {
         int count = 0;
         for (int i = 0; i < groups.size(); i++) {
-            count += groups.getEl(i).staffEmployeesQuantity();
+            count += groups.get(i).staffEmployeesQuantity();
         }
         return count;
     }
@@ -250,7 +250,7 @@ public class ProjectManager implements GroupsManager {
     public int employeesOnTripQuantity() {
         int count = 0;
         for (int i = 0; i < groups.size(); i++) {
-            count += groups.getEl(i).employeesOnTripCurrentlyQuantity();
+            count += groups.get(i).employeesOnTripCurrentlyQuantity();
         }
         return count;
     }
@@ -259,7 +259,7 @@ public class ProjectManager implements GroupsManager {
     public Employee[] employeesOnTrip() {
         Employee[] temp = new Employee[employeesOnTripQuantity()];
         for (int i = 0; i < groups.size(); i++) {
-            temp = groups.getEl(i).employeesOnTripCurrently();
+            temp = groups.get(i).employeesOnTripCurrently();
         }
         return temp;
     }
@@ -268,7 +268,7 @@ public class ProjectManager implements GroupsManager {
     public double averageDaysInTrip() {
         double temp = 0;
         for (int i = 0; i < groups.size(); i++) {
-            temp += groups.getEl(i).averageDaysInTrip();
+            temp += groups.get(i).averageDaysInTrip();
         }
         return temp;
     }

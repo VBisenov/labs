@@ -29,7 +29,7 @@ public class Project implements EmployeeGroup {
 
     private boolean alreadyAdded(Employee employeeToAdd){
         for (int i = 0; i < employees.size(); i++) {
-            if (employeeToAdd.equals(employees.getEl(i))){
+            if (employeeToAdd.equals(employees.get(i))){
                 return true;
             }
         }
@@ -39,8 +39,8 @@ public class Project implements EmployeeGroup {
     public Employee getEmployee(String firstName, String secondName){
         Employee employee;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i).getFirstName().equals(firstName) && employees.getEl(i).getSecondName().equals(secondName)){
-                employee = employees.getEl(i);
+            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getSecondName().equals(secondName)){
+                employee = employees.get(i);
                 return employee;
             }
         }
@@ -53,7 +53,6 @@ public class Project implements EmployeeGroup {
             return false;
         } else {
             employees.remove(getEmployee(firstName, secondName));
-            employees.setSize(employees.size() - 1);
             return true;
         }
     }
@@ -63,7 +62,6 @@ public class Project implements EmployeeGroup {
             return false;
         } else {
             employees.remove(employee);
-            employees.setSize(employees.size() - 1);
             return true;
         }
     }
@@ -71,11 +69,11 @@ public class Project implements EmployeeGroup {
     public Employee employeeBestSalary() {
         int indexOfMax = 0;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i).getSalary() > employees.getEl(indexOfMax).getSalary()){
+            if (employees.get(i).getSalary() > employees.get(indexOfMax).getSalary()){
                 indexOfMax = i;
             }
         }
-        return employees.getEl(indexOfMax);
+        return employees.get(indexOfMax);
     }
 
     public int employeesQuantity(){
@@ -89,7 +87,7 @@ public class Project implements EmployeeGroup {
     public Employee[] getEmployees(){
         Employee[] array = new Employee[employees.size()];
         for (int i = 0; i < employees.size(); i++) {
-            array[i] = employees.getEl(i);
+            array[i] = employees.get(i);
         }
         return array;
     }
@@ -97,7 +95,7 @@ public class Project implements EmployeeGroup {
     private int employeesJobTitleQuantity(JobTitlesEnum jobTitle){
         int count = 0;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i).getJobTitle() == jobTitle){
+            if (employees.get(i).getJobTitle() == jobTitle){
                 count++;
             }
         }
@@ -108,8 +106,8 @@ public class Project implements EmployeeGroup {
         Employee[] temp = new Employee[employeesJobTitleQuantity(jobTitle)];
         int count = 0;
         for (int i = 0; i < temp.length; i++) {
-            if (employees.getEl(i).getJobTitle() == jobTitle){
-                temp[count++] = employees.getEl(i);
+            if (employees.get(i).getJobTitle() == jobTitle){
+                temp[count++] = employees.get(i);
             }
         }
         return temp;
@@ -138,7 +136,7 @@ public class Project implements EmployeeGroup {
 
     public boolean contains(String firstName, String secondName){
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i).getFirstName().equals(firstName) && employees.getEl(i).getSecondName().equals(secondName)){
+            if (employees.get(i).getFirstName().equals(firstName) && employees.get(i).getSecondName().equals(secondName)){
                 return true;
             }
         }
@@ -148,7 +146,7 @@ public class Project implements EmployeeGroup {
     private JobTitlesEnum[] jobTitles(){
         JobTitlesEnum[] jobTitlesEnums = new JobTitlesEnum[employees.size()];
         for (int i = 0; i < employees.size(); i++) {
-            jobTitlesEnums[i] = employees.getEl(i).getJobTitle();
+            jobTitlesEnums[i] = employees.get(i).getJobTitle();
         }
         return jobTitlesEnums;
     }
@@ -158,7 +156,7 @@ public class Project implements EmployeeGroup {
     public int partTimeEmployeesQuantity() {
         int count = 0;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i) instanceof  PartTimeEmployee){
+            if (employees.get(i) instanceof  PartTimeEmployee){
                 count ++;
             }
         }
@@ -169,7 +167,7 @@ public class Project implements EmployeeGroup {
     public int staffEmployeesQuantity() {
         int count = 0;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i) instanceof  StaffEmployee){
+            if (employees.get(i) instanceof  StaffEmployee){
                 count ++;
             }
         }
@@ -181,8 +179,8 @@ public class Project implements EmployeeGroup {
     public int employeesOnTripCurrentlyQuantity() {
         int count = 0;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i) instanceof StaffEmployee) {
-                if (((StaffEmployee) employees.getEl(i)).isOnTrip()) {
+            if (employees.get(i) instanceof StaffEmployee) {
+                if (((StaffEmployee) employees.get(i)).isOnTrip()) {
                     count++;
                 }
             }
@@ -195,9 +193,9 @@ public class Project implements EmployeeGroup {
         int count = 0;
         Employee[] temp = new Employee[employeesOnTripCurrentlyQuantity()];
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i) instanceof StaffEmployee) {
-                if ((((StaffEmployee) employees.getEl(i)).isOnTrip())) {
-                    temp[count++] = employees.getEl(i);
+            if (employees.get(i) instanceof StaffEmployee) {
+                if ((((StaffEmployee) employees.get(i)).isOnTrip())) {
+                    temp[count++] = employees.get(i);
                 }
             }
         }
@@ -210,9 +208,9 @@ public class Project implements EmployeeGroup {
         double employeesQuantity = employees.size();
         double daysCount = 0;
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i) instanceof StaffEmployee && employees.getEl(i).getTravelsQuantity() > 0){
-                for (int j = 0; j < ((StaffEmployee) employees.getEl(i)).getTravelsArray().length; j++) {
-                    daysCount += ((StaffEmployee) employees.getEl(i)).getTravelsArray()[j].getDaysCount();
+            if (employees.get(i) instanceof StaffEmployee && employees.get(i).getTravelsQuantity() > 0){
+                for (int j = 0; j < ((StaffEmployee) employees.get(i)).getTravelsArray().length; j++) {
+                    daysCount += ((StaffEmployee) employees.get(i)).getTravelsArray()[j].getDaysCount();
                 }
             }
         }
@@ -346,8 +344,8 @@ public class Project implements EmployeeGroup {
         StringBuilder sb = new StringBuilder();
         if (!name.equals("")) sb.append(" Name: ").append(name).append(" Size: ").append(employees.size());
         for (int i = 0; i < employees.size(); i++) {
-            if (employees.getEl(i) != null) {
-                sb.append(employees.getEl(i));
+            if (employees.get(i) != null) {
+                sb.append(employees.get(i));
             }
         }
         return sb.toString();
