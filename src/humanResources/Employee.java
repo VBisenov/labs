@@ -1,6 +1,6 @@
 package humanResources;
 
-abstract class Employee implements Comparable<Employee>{
+public abstract class Employee implements Comparable<Employee>{
     private String firstName, secondName;
     private JobTitlesEnum jobTitle;
     private int salary;
