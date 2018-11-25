@@ -168,33 +168,12 @@ public class StaffEmployee extends Employee implements BusinessTraveller{
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-
-        if (this.getSecondName().equals("")) {
-            sb.append(this.getSecondName()).append(" ");
-        }
-
-        if (!this.getFirstName().equals("")) {
-            sb.append(this.getFirstName()).append(" ");
-        }
-
-        if (this.getJobTitle() != JobTitlesEnum.NONE) {
-            sb.append(this.getJobTitle()).append(" ");
-        }
-
-        if (this.getBonus() != 0) {
-            sb.append(this.getSalary()).append(" р., ").append(this.getBonus()).append(" р.");
-        } else if (this.getBonus() == 0 && this.getSalary() != 0) {
-            sb.append(this.getSalary()).append(" р.");
-        }
-
-        if (this.getTravelsArray().length != 0) {
-            sb.append("\nКомандировки:");
-            for (BusinessTravel bt : this.getTravelsArray()) {
-                sb.append("\n").append(bt.toString());
-            }
-        }
+        sb.append(super.toString());
+        if (bonus != 0) sb.append(" bonus: ").append(bonus);
+        if (travelsQuantity > 0) sb.append("| Business travels: ").append(Arrays.asList(getTravelsArray()));
         return sb.toString();
     }
+
 
     @Override
     public boolean equals(Object obj) {

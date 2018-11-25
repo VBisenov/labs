@@ -34,7 +34,7 @@ public class PartTimeEmployee extends Employee {
     @Override
     public String toString() {
 
-        return String.format("%s %s, %s (part time employee), %d р.", getSecondName(), getFirstName(), getJobTitle().toString(), getSalary());
+        return String.format("%s %s, %s (part time employee), %d р. ", getSecondName(), getFirstName(), getJobTitle().toString(), getSalary());
 
         /*
         StringBuilder result = new StringBuilder();

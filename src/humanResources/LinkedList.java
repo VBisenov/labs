@@ -8,7 +8,7 @@ public class LinkedList<X> implements List<X> {
     private int size;
 
     public LinkedList(){
-
+        head = new Node(null, null);
     }
 
     public void setSize(int size) {
@@ -16,9 +16,10 @@ public class LinkedList<X> implements List<X> {
     }
 
     private Node getNode(int index){
-        if (index >= size){
+        if (index >= size) {
             throw new IndexOutOfBoundsException();
         }
+        //todo возвращается head, т.к. при первой итерации index == i
         Node result = head;
         for (int i = 0; i < index; i++) {
             result = result.next;
@@ -81,19 +82,29 @@ public class LinkedList<X> implements List<X> {
 
     @Override
     public <T> T[] toArray(T[] a) {
-        return null;
+        int i = 0;
+        Object[] result = a;
+        for (Node x = head; x != null; x = x.next)
+            result[i++] = x.element;
+
+        if (a.length > size)
+            a[size] = null;
+
+        return a;
     }
 
     @Override
     public boolean add(X x) {
-        if (head == null){
-            head = new Node(x, null);
+        if (head.element == null){
+            head.element = x;
+            head.next = null;
+            size++;
         } else {
-            Node newNode = head;
-            while (newNode.next != null) {
-                newNode = newNode.next;
+            Node buffer = head;
+            while (buffer.next != null) {
+                buffer = buffer.next;
             }
-            newNode.next = new Node(x, null);
+            buffer.next = new Node(x, null);
             size++;
         }
         return true;
@@ -150,7 +161,6 @@ public class LinkedList<X> implements List<X> {
     public boolean addAll(Collection<? extends X> c) {
         for (X x: c){
             add(x);
-            size += c.size();
             return true;
         }
         return false;

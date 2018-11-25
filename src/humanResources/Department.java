@@ -354,7 +354,7 @@ public class Department implements EmployeeGroup{
         Employee[] temp = new Employee[employeesWithBusinessTripQuantity()];
         int count = 0;
         for (int i = 0; i < size; i++) {
-            if (employees[i].getTravelsQuantity() > 0){
+            if (employees[i] instanceof StaffEmployee){
                 temp[count++] = employees[i];
             }
         }
@@ -430,33 +430,6 @@ public class Department implements EmployeeGroup{
         return result;
     }
 
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if (!name.equals("")) sb.append("Department: ").append(name);
-        if (size != 0) sb.append(" size: "+size);
-        for (int i = 0; i < employees.length; i++) {
-            if (employees[i] != null) {
-                sb.append(employees[i]);
-            }
-        }
-        return String.format(sb.toString());
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Department)) return false;
-
-        Department department = (Department) obj;
-        if (!department.getName().equals(name)) return false;
-        if (department.employeesQuantity() != employeesQuantity()) return false;
-        return Arrays.equals(department.employees, employees);
-    }
-
-    @Override
-    public int hashCode() {
-        return getName().hashCode() ^ size ^ Arrays.hashCode(employees);
-    }
 
     @Override
     public Employee get(int index) {
@@ -530,6 +503,35 @@ public class Department implements EmployeeGroup{
             }
         }
         return list;
+    }
+
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        if (!name.equals("")) sb.append("Department: ").append(name);
+        if (size != 0) sb.append(" size: "+size).append(" employees: ");
+        for (int i = 0; i < employees.length; i++) {
+            if (employees[i] != null) {
+                sb.append(employees[i]);
+            }
+        }
+        return String.format(sb.toString());
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Department)) return false;
+
+        Department department = (Department) obj;
+        if (!department.getName().equals(name)) return false;
+        if (department.employeesQuantity() != employeesQuantity()) return false;
+        return Arrays.equals(department.employees, employees);
+    }
+
+    @Override
+    public int hashCode() {
+        return getName().hashCode() ^ size ^ Arrays.hashCode(employees);
     }
 
 }
