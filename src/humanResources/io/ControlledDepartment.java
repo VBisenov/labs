@@ -42,6 +42,12 @@ isChanged.
         return isChanged;
     }
 
+
+    @Override
+    public Employee[] getEmployees() {
+        return super.getEmployees();
+    }
+
     @Override
     public void setName(String name) {
         isChanged = true;
