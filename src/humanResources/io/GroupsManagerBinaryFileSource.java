@@ -2,10 +2,12 @@ package humanResources.io;
 
 import humanResources.EmployeeGroup;
 
+import java.io.File;
+
 public class GroupsManagerBinaryFileSource extends GroupsManagerFileSource {
     @Override
     public void load(EmployeeGroup group) {
-        super.load(group);
+        File file = new File("C:\\Users\\Java", group.getName());
     }
 
     @Override

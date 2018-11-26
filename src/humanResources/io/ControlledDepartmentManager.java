@@ -40,8 +40,9 @@ addAll(), removeAll(), retainAll() – аналогично.
     public boolean add(EmployeeGroup group){
         /*
         todo
-        на основе группы сотрудников создается экземпляр ControlledDepartmentManager
-         */
+        Разобраться куда пихать этот экземпляр
+        */
+        EmployeeGroup controlledDepartment = new ControlledDepartment(group.getName(), (Department) group);
         source.create(group);
         super.add(group);
         return true;
@@ -58,9 +59,6 @@ addAll(), removeAll(), retainAll() – аналогично.
 
     @Override
     public boolean addAll(int index, Collection<? extends EmployeeGroup> c) {
-        if (!(c instanceof  EmployeeGroup)){
-            return false;
-        }
 
         for (EmployeeGroup group: c){
             source.create(group);

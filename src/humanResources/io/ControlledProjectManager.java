@@ -2,6 +2,7 @@ package humanResources.io;
 
 import humanResources.Employee;
 import humanResources.EmployeeGroup;
+import humanResources.Project;
 import humanResources.ProjectManager;
 
 import java.util.Collection;
@@ -19,8 +20,10 @@ public class ControlledProjectManager extends ProjectManager {
     @Override
     public boolean add(EmployeeGroup group){
         /*
-        на основе группы сотрудников создается экземпляр ControlledProjectManager
-         */
+        todo
+        Разобраться куда пихать этот экземпляр
+        */
+        EmployeeGroup controlledProject = new ControlledProject(group.getName(), (Project) group);
         source.create(group);
         return super.add(group);
     }
