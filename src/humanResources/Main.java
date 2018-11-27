@@ -1,5 +1,8 @@
 package humanResources;
 
+import humanResources.io.GroupsManagerBinaryFileSource;
+import humanResources.io.GroupsManagerTextFileSource;
+
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -107,5 +110,19 @@ public class Main {
         System.out.println(departments.averageDaysInTrip());
         System.out.println(projects.averageDaysInTrip());
         System.out.println(groups.averageDaysInTrip());
+
+//        GroupsManagerTextFileSource groupsManager = new GroupsManagerTextFileSource("C:\\Java\\Text");
+//        groupsManager.store(department);
+//        groupsManager.store(project);
+//        System.out.println(groupsManager.test(project));
+
+        GroupsManagerBinaryFileSource groupsManager = new GroupsManagerBinaryFileSource("C:\\Java\\Binary");
+        groupsManager.store(department);
+
+        LinkedList<Integer> list = new LinkedList<>();
+        list.add(1);
+        list.add(2);
+        list.add(3);
+        System.out.println(list.get(2));
     }
 }
