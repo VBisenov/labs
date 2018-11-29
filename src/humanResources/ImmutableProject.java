@@ -1,8 +1,9 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-public class ImmutableProject extends Project {
+public class ImmutableProject extends Project implements Serializable {
 
     public ImmutableProject(String name) {
         super(name);

@@ -1,11 +1,12 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class DepartmentsManager implements GroupsManager {
+public class DepartmentsManager implements GroupsManager, Serializable {
     private String name;
     private EmployeeGroup[] employeeGroups;
     private int size;

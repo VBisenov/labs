@@ -1,10 +1,11 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class BusinessTravel {
+public class BusinessTravel implements Serializable {
     private final String cityName;
     private final LocalDate dateStart, dateEnd;
     private final int compensation;
@@ -51,13 +52,7 @@ public class BusinessTravel {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        if (!cityName.equals("")) sb.append(" City name: ").append(cityName);
-        if (dateStart != null) sb.append(" Date start: ").append(dateStart);
-        if (dateEnd != null) sb.append(" Date end: ").append(dateEnd);
-        if (compensation != 0) sb.append(" Compensation: ").append(compensation).append(" p.");
-        if (!description.equals("")) sb.append(" Description: ").append(description);
-        return String.format(sb.toString());
+        return String.format("%s %d (%d p.). %s", getCityName(), getDaysCount(), getCompensation(), getDescription());
     }
 
     @Override

@@ -1,11 +1,12 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 
-public class ProjectManager implements GroupsManager {
+public class ProjectManager implements GroupsManager, Serializable {
     private LinkedList<EmployeeGroup> groups = new LinkedList<>();
     private int size;
 

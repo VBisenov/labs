@@ -1,9 +1,10 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public interface EmployeeGroup extends List<Employee> {
+public interface EmployeeGroup extends List<Employee>, Serializable {
 
     String getName();
     int getSize();

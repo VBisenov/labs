@@ -1,32 +1,23 @@
 package humanResources.io;
-
-import humanResources.*;
+import humanResources.DepartmentsManager;
+import humanResources.Employee;
+import humanResources.EmployeeGroup;
+import humanResources.factory.EmployeeFactory;
 
 import java.util.Collection;
 
 public class ControlledDepartmentManager extends DepartmentsManager {
-    /*
-    Создайте класс ControlledDepartmentManager, расширяющий класс DepartmentManager. Он
-содержит такие же конструкторы, что и суперкласс (и просто вызывает их в своих
-конструкторах).
-Он добавляет одно protected поле типа Source<EmployeeGroup>, а также гетер и сеттер для
-него.
-Также необходимо переопределить методы, которые так или иначе меняют состояние класса:
-- add(), сначала, на основе группы сотрудников создается экземпляр
-ControlledDepartmentManage, затем вызывается метод источника create(), а потом только
-реализация метода add() в суперклассе.
-- remove(), сначала вызывается метод источника delete(employeeGroup), a затем реализация
-метода в суперклассе.
-addAll(), removeAll(), retainAll() – аналогично.
-     */
     protected Source<EmployeeGroup> source;
+    private EmployeeFactory factory;
 
-    public ControlledDepartmentManager(String name) {
+    public ControlledDepartmentManager(String name, EmployeeFactory factory) {
         super(name);
+        this.factory = factory;
     }
 
-    public ControlledDepartmentManager(String name, EmployeeGroup[] groups) {
+    public ControlledDepartmentManager(String name, EmployeeGroup[] groups, EmployeeFactory factory) {
         super(name, groups);
+        this.factory = factory;
     }
 
     public Source<EmployeeGroup> getSource() {
@@ -37,82 +28,70 @@ addAll(), removeAll(), retainAll() – аналогично.
         this.source = source;
     }
 
-    public boolean add(EmployeeGroup group){
-        /*
-        todo
-        Разобраться куда пихать этот экземпляр
-        */
-        EmployeeGroup controlledDepartment = new ControlledDepartment(group.getName(), (Department) group);
+    @Override
+    public boolean add(EmployeeGroup groupToAdd) {
+        EmployeeGroup group = factory.createDepartment(groupToAdd.getName(), (Employee[]) groupToAdd.toArray());
         source.create(group);
-        super.add(group);
-        return true;
+        return super.add(group);
     }
 
     @Override
     public boolean remove(Object o) {
-        if (!(o instanceof EmployeeGroup)) {
-            return false;
-        }
         source.delete((EmployeeGroup) o);
         return super.remove(o);
     }
 
     @Override
     public boolean addAll(int index, Collection<? extends EmployeeGroup> c) {
-
         for (EmployeeGroup group: c){
-            source.create(group);
+            EmployeeGroup d = factory.createDepartment(group.getName(), (Employee[]) group.toArray());
+            source.create(d);
         }
         return super.addAll(index, c);
     }
 
+
+
+    @Override
+    public boolean addAll(Collection<? extends EmployeeGroup> c) {
+        for (EmployeeGroup group: c){
+            EmployeeGroup d = factory.createDepartment(group.getName(), (Employee[]) group.toArray());
+            source.create(d);
+        }
+        return super.addAll(c);
+    }
+
     @Override
     public boolean removeAll(Collection<?> c) {
-        if (!(c instanceof  EmployeeGroup)){
-            return false;
-        }
-        for (Object o: c){
-            source.delete((EmployeeGroup)o);
+        for (EmployeeGroup group: this){
+            if (c.contains(group)){
+                source.delete(group);
+            }
         }
         return super.removeAll(c);
     }
 
     @Override
     public boolean retainAll(Collection<?> c) {
-        if (!(c instanceof  EmployeeGroup)){
-            return false;
-        }
-        for (Object o: c){
-            if (!c.contains(o)){
-                source.delete((EmployeeGroup) o);
+        for (EmployeeGroup group: this){
+            if (!c.contains(group)){
+                source.delete(group);
             }
         }
         return super.retainAll(c);
     }
 
-
-    /*
-Он добавляет методы:
-store() – проходит по всем группам сотрудников, определяет, изменилась ли та или иная
-группа (isChanged), и если изменилась – перезаписывает файл группы вызывая метод
-store(employeeGroup) на объекте Source<EmployeeGroup>.
-load() – проходит по всем шруппам и восстанавливает их состояние из источника, вызывая
-метод load(order).
-     */
-
-    void store(){
+    public void store(){
         for (EmployeeGroup group: this){
             if (((ControlledDepartment) group).isChanged){
                 source.store(group);
-                ((ControlledDepartment) group).isChanged = false;
             }
         }
     }
 
-    void load(){
+    public void load(){
         for (EmployeeGroup group: this){
-                source.load(group);
+            source.load(group);
         }
     }
-
 }

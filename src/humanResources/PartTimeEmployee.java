@@ -1,12 +1,14 @@
 package humanResources;
 
-public class PartTimeEmployee extends Employee {
+import java.io.Serializable;
+
+public class PartTimeEmployee extends Employee implements Serializable {
 
     public PartTimeEmployee(String firstName, String secondName){
         super(firstName, secondName);
     }
 
-    protected PartTimeEmployee(String firstName, String secondName, JobTitlesEnum jobTitle, int salary){
+    public PartTimeEmployee(String firstName, String secondName, JobTitlesEnum jobTitle, int salary){
         super(firstName, secondName, jobTitle, salary);
     }
 
@@ -16,17 +18,17 @@ public class PartTimeEmployee extends Employee {
     }
 
     @Override
-    int getTravelsQuantity() {
+    public int getTravelsQuantity() {
         return 0;
     }
 
     @Override
-    int getBonus() {
+    public int getBonus() {
         return 0;
     }
 
     @Override
-    void setBonus(int bonus) {
+    public void setBonus(int bonus) {
         //nothing to do
     }
 
@@ -34,7 +36,7 @@ public class PartTimeEmployee extends Employee {
     @Override
     public String toString() {
 
-        return String.format("%s %s, %s (part time employee), %d р. ", getSecondName(), getFirstName(), getJobTitle().toString(), getSalary());
+        return String.format("%s %s, %s (Part Time employee), %d р. ; \n", getSecondName(), getFirstName(), getJobTitle().toString(), getSalary());
 
         /*
         StringBuilder result = new StringBuilder();

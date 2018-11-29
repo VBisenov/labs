@@ -1,9 +1,10 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
-public interface GroupsManager extends List<EmployeeGroup> {
+public interface GroupsManager extends List<EmployeeGroup>, Serializable {
 
     boolean add(EmployeeGroup group);
     int groupsQuantity();

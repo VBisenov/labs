@@ -1,11 +1,12 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-public class CycleLinkedList<X> implements Set<X> {
+public class CycleLinkedList<X> implements Set<X>, Serializable {
     private Node head;
     private int size;
 

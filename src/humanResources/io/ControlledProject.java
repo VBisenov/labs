@@ -12,8 +12,30 @@ public class ControlledProject extends Project {
         super(name);
     }
 
-    public ControlledProject(String name, Project project) {
-        super(name, project.getEmployees());
+    public ControlledProject(String name, Employee[] employees) {
+        super(name, employees);
+    }
+
+    public boolean isChanged() {
+        return isChanged;
+    }
+
+    @Override
+    public void setName(String name) {
+        isChanged = true;
+        super.setName(name);
+    }
+
+    @Override
+    public void add(int index, Employee element) {
+        isChanged = true;
+        super.add(index, element);
+    }
+
+    @Override
+    public boolean addAll(int index, Collection<? extends Employee> c) {
+        isChanged = true;
+        return super.addAll(index, c);
     }
 
     @Override
@@ -29,27 +51,15 @@ public class ControlledProject extends Project {
     }
 
     @Override
-    public boolean addAll(int index, Collection<? extends Employee> c) {
+    public boolean removeAll(Collection<?> c) {
         isChanged = true;
-        return super.addAll(index, c);
-    }
-
-    @Override
-    public void add(int index, Employee element) {
-        isChanged = true;
-        super.add(index, element);
+        return super.removeAll(c);
     }
 
     @Override
     public Employee remove(int index) {
         isChanged = true;
         return super.remove(index);
-    }
-
-    @Override
-    public boolean remove(Employee employee) {
-        isChanged = true;
-        return super.remove(employee);
     }
 
     @Override
@@ -65,8 +75,8 @@ public class ControlledProject extends Project {
     }
 
     @Override
-    public boolean removeAll(Collection<?> c) {
+    public boolean remove(Employee employee) {
         isChanged = true;
-        return super.removeAll(c);
+        return super.remove(employee);
     }
 }

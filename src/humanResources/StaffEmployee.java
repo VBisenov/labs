@@ -1,5 +1,6 @@
 package humanResources;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,7 +8,7 @@ import java.util.Iterator;
 
 import static java.time.temporal.ChronoUnit.DAYS;
 
-public class StaffEmployee extends Employee implements BusinessTraveller{
+public class StaffEmployee extends Employee implements BusinessTraveller, Serializable {
     private CycleLinkedList<BusinessTravel> businessTravels = new CycleLinkedList<>();
     private int bonus;
     private int travelsQuantity;
@@ -31,12 +32,12 @@ public class StaffEmployee extends Employee implements BusinessTraveller{
     }
 
     @Override
-    int getBonus() {
+    public int getBonus() {
         return bonus;
     }
 
     @Override
-    void setBonus(int bonus) {
+    public void setBonus(int bonus) {
         this.bonus = bonus;
     }
 
@@ -169,8 +170,17 @@ public class StaffEmployee extends Employee implements BusinessTraveller{
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append(super.toString());
-        if (bonus != 0) sb.append(" bonus: ").append(bonus);
-        if (travelsQuantity > 0) sb.append("| Business travels: ").append(Arrays.asList(getTravelsArray()));
+        if (bonus == 0) {
+            sb.append(" ");
+        } else {
+            sb.append(" ").append(bonus);
+        }
+        sb.append("Travels ");
+        if (travelsQuantity != 0) {
+            for (int i = 0; i < travelsQuantity; i++) {
+                sb.append(businessTravels.getEl(i).toString());
+            }
+        } sb.append(";");
         return sb.toString();
     }
 

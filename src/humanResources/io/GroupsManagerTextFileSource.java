@@ -1,76 +1,93 @@
 package humanResources.io;
 
-import humanResources.Employee;
-import humanResources.EmployeeGroup;
+import humanResources.*;
 
 import java.io.*;
-import java.nio.file.FileAlreadyExistsException;
-import java.util.NoSuchElementException;
+import java.nio.file.NoSuchFileException;
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class GroupsManagerTextFileSource extends GroupsManagerFileSource {
 
-    public GroupsManagerTextFileSource(String path) {
-        super.setPath(path);
-    }
-
-    private void createFile(File file) {
-        try {
-            boolean created = file.createNewFile();
-            if (created) {
-                System.out.println("File " + file.getPath() + " has been created");
-            } else {
-                System.out.println("File " + file.getPath() + " already exists");
-            }
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-
-    private void writeFile(File file, String[] string) {
-        try (PrintWriter pw = new PrintWriter(file)) {
-            for (int i = 0; i < string.length; i++) {
-                pw.println(string[i]);
-            }
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.getMessage());
-        }
-
+    public GroupsManagerTextFileSource(String path){
+        super(path);
     }
 
     @Override
     public void load(EmployeeGroup group) {
-        File file = new File(getPath() + "\\" + group.getName() + ".txt");
-        try (Scanner sc = new Scanner(file)) {
-            for (int i = 0; i < file.length(); i++) {
-                while (sc.hasNext()) {
-                    sc.nextLine();
+        File file = new File(getPath()+"\\"+group.getName()+".txt");
+
+        try (Scanner sc = new Scanner(file)){
+            String[] input = sc.nextLine().split(";");
+            if (input[0].equals("Department")){
+                group = new Department(input[1]);
+            } else if (input[1].equals("Project")){
+                group = new Project(input[1]);
+            }
+
+            int employeesQuantity = Integer.parseInt(sc.nextLine());
+            Employee employee;
+
+            for (int i = 0; i < employeesQuantity; i++) {
+                input = sc.nextLine().split(";");
+                if (input[5].equals("partTime")) {
+                    employee = new PartTimeEmployee(input[0], input[1], JobTitlesEnum.valueOf(input[2]), Integer.parseInt(input[3]));
+                    employee.setBonus(Integer.parseInt(input[4]));
+                    group.add(employee);
+                } else {
+                    employee = new StaffEmployee(input[0], input[1], JobTitlesEnum.valueOf(input[2]), Integer.parseInt(input[3]));
+                    employee.setBonus(Integer.parseInt(input[4]));
+                    BusinessTravel bt;
+                    int btQuantity = Integer.parseInt(input[5]);
+                    for (int j = 0; j < btQuantity; j++) {
+                        input = sc.nextLine().split(";");
+                        bt = new BusinessTravel(input[0], LocalDate.parse(input[1]), LocalDate.parse(input[2]), Integer.parseInt(input[3]), input[4]);
+                        ((StaffEmployee) employee).add(bt);
+                    }
+                    group.add(employee);
                 }
             }
-        } catch (FileNotFoundException ex) {
-            System.out.println(ex.getMessage());
+        } catch (IOException ex){
+            ex.getMessage();
         }
     }
 
     @Override
     public void store(EmployeeGroup group) {
-        File file = new File(getPath() + "\\" + group.getName() + ".txt");
-        String[] result = new String[group.getSize()];
+        File file = new File(getPath()+"\\"+group.getName()+".txt");
 
-        createFile(file);
-        for (int i = 0; i < group.getSize(); i++) {
-            if (group.get(i) == null) {
-                throw new NoSuchElementException("Fuck");
+        try (PrintWriter writer = new PrintWriter(file)){
+
+            if (group instanceof Department){
+                writer.println("Department;"+group.getName());
+            } else if (group instanceof Project){
+                writer.println("Project;"+group.getName());
             }
-            result[i] = group.get(i).toString();
+            writer.println(group.size());
+
+            for (Employee e: group) {
+                if (e != null) {
+                    writer.print(e.getFirstName() + ";" + e.getSecondName() + ";" + e.getJobTitle() + ";" + e.getSalary() + ";" + e.getBonus()+ ";");
+                    if (!(e instanceof BusinessTraveller)){
+                        writer.println("-1");
+                    } else {
+                        writer.print(e.getTravelsQuantity()+";");
+                        writer.println();
+                        for (BusinessTravel bt: ((StaffEmployee) e).getTravelsArray()){
+                            writer.println(bt.getCityName()+";"+bt.getDateStart()+";"+bt.getDateEnd()+";"+bt.getCompensation()+";"+bt.getDescription()+";");
+                        }
+                    }
+                }
+            }
+        } catch (IOException ex){
+            ex.getMessage();
         }
-        writeFile(file, result);
     }
 
     @Override
     public void delete(EmployeeGroup group) {
-        File file = new File(getPath() + "\\" + group.getName() + ".txt");
-        if (file.exists()) {
+        File file = new File(getPath()+"\\"+group.getName()+".txt");
+        if (file.exists()){
             file.delete();
         }
     }
@@ -81,7 +98,7 @@ public class GroupsManagerTextFileSource extends GroupsManagerFileSource {
         if (!file.exists()) {
             try {
                 file.createNewFile();
-            } catch (IOException ex) {
+            } catch (IOException ex){
                 ex.getMessage();
             }
         }

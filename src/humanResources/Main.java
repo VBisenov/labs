@@ -1,15 +1,23 @@
 package humanResources;
 
+
+import humanResources.factory.EmployeeFactory;
+import humanResources.factory.TextFileBasedEmployeeFactory;
+import humanResources.io.ControlledDepartmentManager;
 import humanResources.io.GroupsManagerBinaryFileSource;
+import humanResources.io.GroupsManagerSerializedFileSource;
 import humanResources.io.GroupsManagerTextFileSource;
 
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
         System.out.println(" Department: \n");
         StaffEmployee firstEmployee = new StaffEmployee("Harry", "Potter", JobTitlesEnum.AGENT, 5000);
         StaffEmployee secondEmployee = new StaffEmployee("Newill", "Longbottom", JobTitlesEnum.ENGINEER, 13000);
@@ -44,11 +52,10 @@ public class Main {
         System.out.println("Groups quantity: " + departments.groupsQuantity());
 
         BusinessTravel businessTravel = new BusinessTravel("Moscow", LocalDate.of(2018, 11, 1), LocalDate.of(2018, 11, 20), 5000, "Trip to Moscow");
-        BusinessTravel businessTravelSecond = new BusinessTravel("London", LocalDate.of(2019, 11, 1), LocalDate.of(2019,11,20), 3000, "Trip to London");
+        BusinessTravel businessTravelSecond = new BusinessTravel("London", LocalDate.of(2019, 11, 1), LocalDate.of(2019, 11, 20), 3000, "Trip to London");
         firstEmployee.add(businessTravel);
         secondEmployee.add(businessTravelSecond);
 
-        department.remove(fifthEmployee);
         //      department.remove(JobTitlesEnum.AGENT);
         System.out.println(Arrays.asList(department.getEmployee("Harry", "Potter")));
         System.out.println(Arrays.asList(((Department) department).jobTitlesWithoutRepeat()));
@@ -56,7 +63,7 @@ public class Main {
         System.out.println(Arrays.asList(((Department) department).employeesWithBusinessTrip()));
 
         System.out.println("\n Project: \n");
-        Project project = new Project("Project", department.getEmployees());
+        Project project = new Project("Lesson", department.getEmployees());
         project.remove(fourthEmployee);
         System.out.println(project.getEmployee("Ron", "Wisley"));
         //project.remove("Ron", "Wisley");
@@ -111,18 +118,31 @@ public class Main {
         System.out.println(projects.averageDaysInTrip());
         System.out.println(groups.averageDaysInTrip());
 
-//        GroupsManagerTextFileSource groupsManager = new GroupsManagerTextFileSource("C:\\Java\\Text");
-//        groupsManager.store(department);
-//        groupsManager.store(project);
-//        System.out.println(groupsManager.test(project));
 
-        GroupsManagerBinaryFileSource groupsManager = new GroupsManagerBinaryFileSource("C:\\Java\\Binary");
-        groupsManager.store(department);
+        firstEmployee.add(businessTravelSecond);
+        System.out.println(firstEmployee.toString());
 
-        LinkedList<Integer> list = new LinkedList<>();
-        list.add(1);
-        list.add(2);
-        list.add(3);
-        System.out.println(list.get(2));
+        firstEmployee.setBonus(1000);
+
+//        GroupsManagerTextFileSource textFileSource = new GroupsManagerTextFileSource("C:\\Java\\Output");
+//        textFileSource.store(department);
+//        textFileSource.load(department);
+//        System.out.println();
+//
+//        GroupsManagerBinaryFileSource binaryFileSource = new GroupsManagerBinaryFileSource("C:\\Java\\Output");
+//        binaryFileSource.store(department);
+//        binaryFileSource.load(department);
+//
+//        GroupsManagerSerializedFileSource serializedFileSource = new GroupsManagerSerializedFileSource("C:\\Java\\Output");
+//        serializedFileSource.store(department);
+//        serializedFileSource.load(department);
+
+        Department forRemove = new Department("qwerty");
+        forRemove.add(firstEmployee);
+//        department.removeAll(forRemove);
+
+        department.remove(5);
+        department.remove(firstEmployee);
+        project.removeAll(department);
     }
 }

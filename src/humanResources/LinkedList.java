@@ -1,9 +1,11 @@
 package humanResources;
 
+import java.io.File;
+import java.io.Serializable;
 import java.util.*;
 
 
-public class LinkedList<X> implements List<X> {
+public class LinkedList<X> implements List<X>, Serializable {
     private Node head;
     private int size;
 
@@ -146,6 +148,7 @@ public class LinkedList<X> implements List<X> {
         size--;
         return true;
     }
+
 
     @Override
     public boolean containsAll(Collection<?> c) {

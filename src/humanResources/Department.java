@@ -1,8 +1,13 @@
 package humanResources;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
-public class Department implements EmployeeGroup{
+public class Department implements EmployeeGroup, Serializable {
     private String name;
     private Employee[] employees;
     private int size;
@@ -61,7 +66,7 @@ public class Department implements EmployeeGroup{
 
     @Override
     public boolean contains(Object o) {
-        for (int i = 0; i < employees.length; i++) {
+        for (int i = 0; i < employees.length ; i++) {
             if (o.equals(employees[i])){
                 return true;
             }
@@ -118,11 +123,14 @@ public class Department implements EmployeeGroup{
             if (o.equals(employees[i])){
                 System.arraycopy(employees, i+1, employees,i, employees.length-1-i);
                 size--;
+                record((Employee) o);
                 return true;
             }
         }
         return false;
     }
+
+
 
     @Override
     public boolean containsAll(Collection<?> c) {
@@ -153,7 +161,6 @@ public class Department implements EmployeeGroup{
             System.arraycopy(employees, index, employees, index+c.size(), size-index);
             add(count++, employees[i]);
             size += c.size();
-            //todo придумать условие выхода из цикла
         }
         return false;
     }
@@ -175,9 +182,10 @@ public class Department implements EmployeeGroup{
     @Override
     public boolean removeAll(Collection<?> c) {
         for (Employee employee: employees){
-            if (c.contains(employee)){
-                remove(employee);
-                return true;
+            if (employee != null) {
+                if (c.contains(employee)) {
+                    remove(employee);
+                }
             }
         }
         return false;
@@ -282,10 +290,23 @@ public class Department implements EmployeeGroup{
             if (employee == employees[i]){
                 System.arraycopy(employees, i+1, employees, i, employees.length-1-i);
                 size--;
+                record(employee);
                 return true;
             }
         }
         return false;
+    }
+
+    private void record(Employee employee){
+        File file = new File("C:\\Java\\Output\\DepartmentRemoved\\"+employee.getFirstName()+employee.getSecondName()+".txt");
+
+        try (PrintWriter pw = new PrintWriter(file)){
+
+            pw.print(employee.getFirstName()+";"+employee.getSecondName()+";"+employee.getBonus()+";"+employee.getSalary()+";"+employee.getJobTitle().toString()+";"+ LocalDate.now());
+
+        } catch (IOException ex){
+            ex.getMessage();
+        }
     }
 
     public boolean remove(JobTitlesEnum jobTitle) {
@@ -293,7 +314,10 @@ public class Department implements EmployeeGroup{
             if (employees[j].getJobTitle() == jobTitle) {
                 System.arraycopy(employees, j+1, employees, j, employees.length-1-j);
                 size--;
-                j--;  // уменьшаем j, т.к. при увеличении на 1 вылетает за пределы
+                for (int i = 0; i < getEmployees(jobTitle).length; i++) {
+                    record(getEmployees(jobTitle)[i]);
+                }
+                j--;
             }
         }
         return false;
@@ -453,13 +477,18 @@ public class Department implements EmployeeGroup{
     public Employee remove(int index) {
         int count = 0;
         Employee result = null;
+        Employee removed = null;
+        int remQuantity = 0;
         for (Employee employee: employees){
             count++;
             if (count == index){
+                removed = employee;
                 result = employee;
                 remove(employee);
             }
         }
+
+        record(removed);
         return result;
     }
 
@@ -533,5 +562,4 @@ public class Department implements EmployeeGroup{
     public int hashCode() {
         return getName().hashCode() ^ size ^ Arrays.hashCode(employees);
     }
-
 }

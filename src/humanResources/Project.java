@@ -1,8 +1,13 @@
 package humanResources;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.*;
 
-public class Project implements EmployeeGroup {
+public class Project implements EmployeeGroup, Serializable {
     private LinkedList<Employee> employees = new LinkedList<>();
     private String name;
 
@@ -36,6 +41,28 @@ public class Project implements EmployeeGroup {
         return false;
     }
 
+    public boolean remove(Employee employee) {
+        if (employee == null) {
+            return false;
+        } else {
+            record(employee);
+            employees.remove(employee);
+            return true;
+        }
+    }
+
+    private void record(Employee employee){
+        File file = new File("C:\\Java\\Output\\ProjectRemoved\\"+employee.getFirstName()+employee.getSecondName()+".txt");
+
+        try (PrintWriter pw = new PrintWriter(file)){
+
+            pw.println(employee.getFirstName()+";"+employee.getSecondName()+";"+employee.getBonus()+";"+employee.getSalary()+";"+employee.getJobTitle().toString()+";"+ LocalDate.now());
+
+        } catch (IOException ex){
+            ex.getMessage();
+        }
+    }
+
     public Employee getEmployee(String firstName, String secondName){
         Employee employee;
         for (int i = 0; i < employees.size(); i++) {
@@ -57,14 +84,6 @@ public class Project implements EmployeeGroup {
         }
     }
 
-    public boolean remove(Employee employee) {
-        if (employee == null) {
-            return false;
-        } else {
-            employees.remove(employee);
-            return true;
-        }
-    }
 
     public Employee employeeBestSalary() {
         int indexOfMax = 0;
@@ -283,6 +302,11 @@ public class Project implements EmployeeGroup {
 
     @Override
     public boolean removeAll(Collection<?> c) {
+        for (Employee employee: employees){
+            if (c.contains(employee)){
+                record(employee);
+            }
+        }
         return employees.removeAll(c);
     }
 

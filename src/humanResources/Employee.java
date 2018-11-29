@@ -1,6 +1,8 @@
 package humanResources;
 
-public abstract class Employee implements Comparable<Employee>{
+import java.io.Serializable;
+
+public abstract class Employee implements Comparable<Employee>, Serializable {
     private String firstName, secondName;
     private JobTitlesEnum jobTitle;
     private int salary;
@@ -55,16 +57,16 @@ public abstract class Employee implements Comparable<Employee>{
         return (getSalary()+getBonus() - o.getSalary()+o.getBonus());
     }
 
-    abstract int getTravelsQuantity();
+    public abstract int getTravelsQuantity();
 
-    abstract int getBonus();
+    public abstract int getBonus();
 
-    abstract void setBonus(int bonus);
+    public abstract void setBonus(int bonus);
 
 
     @Override
     public String toString() {
-        return String.format("%s %s, %s, %d р.", getSecondName(), getFirstName(), getJobTitle().toString(), getSalary());
+        return String.format("%s %s %s %d р. ", getSecondName(), getFirstName(), getJobTitle().toString(), getSalary());
     }
 
     @Override
